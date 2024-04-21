@@ -20,6 +20,8 @@ test("Parse SQL Query", () => {
     joinCondition: null,
     joinTable: null,
     joinType: null,
+    groupByFields: null,
+    hasAggregateWithoutGroupBy: false,
   });
 });
 
@@ -49,6 +51,8 @@ test("Parse SQL Query with WHERE Clause", () => {
     joinCondition: null,
     joinTable: null,
     joinType: null,
+    groupByFields: null,
+    hasAggregateWithoutGroupBy: false,
   });
 });
 
@@ -60,14 +64,3 @@ test("Execute SQL Query with WHERE Clause", async () => {
   expect(result[0]).toHaveProperty("name");
   expect(result[0].id).toBe("2");
 });
-
-//this would fail here as we are not handling case insensitive queries
-
-// test("Execute SQL Query with WHERE Clause (Case insensitive)", async () => {
-//   const query = "SELECT id, name FROM student WHERE name = john";
-//   const result = await executeSELECTQuery(query);
-//   expect(result.length).toBe(1);
-//   expect(result[0]).toHaveProperty("id");
-//   expect(result[0]).toHaveProperty("name");
-//   expect(result[0].id).toBe("2");
-// });

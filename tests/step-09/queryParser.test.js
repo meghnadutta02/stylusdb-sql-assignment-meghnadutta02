@@ -11,6 +11,8 @@ describe("parseJoinClause", () => {
       joinCondition: null,
       joinTable: null,
       joinType: null,
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 
@@ -30,6 +32,8 @@ describe("parseJoinClause", () => {
       joinCondition: null,
       joinTable: null,
       joinType: null,
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 
@@ -54,6 +58,8 @@ describe("parseJoinClause", () => {
       joinCondition: null,
       joinTable: null,
       joinType: null,
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 
@@ -68,6 +74,8 @@ describe("parseJoinClause", () => {
       joinTable: "enrollment",
       joinType: "INNER",
       joinCondition: { left: "student.id", right: "enrollment.student_id" },
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 
@@ -82,6 +90,8 @@ describe("parseJoinClause", () => {
       joinTable: "enrollment",
       joinType: "INNER",
       joinCondition: { left: "student.id", right: "enrollment.student_id" },
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 
@@ -140,6 +150,8 @@ describe("parseJoinClause", () => {
       joinType: "LEFT",
       joinTable: "enrollment",
       joinCondition: { left: "student.id", right: "enrollment.student_id" },
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 
@@ -154,6 +166,8 @@ describe("parseJoinClause", () => {
       joinType: "RIGHT",
       joinTable: "enrollment",
       joinCondition: { left: "student.id", right: "enrollment.student_id" },
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 
@@ -168,6 +182,8 @@ describe("parseJoinClause", () => {
       joinType: "LEFT",
       table: "student",
       whereClauses: [{ field: "student.age", operator: ">", value: "22" }],
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 
@@ -183,6 +199,8 @@ describe("parseJoinClause", () => {
       whereClauses: [
         { field: "enrollment.course", operator: "=", value: "'Physics'" },
       ],
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 
@@ -197,6 +215,8 @@ describe("parseJoinClause", () => {
       joinType: "RIGHT",
       table: "student",
       whereClauses: [{ field: "student.age", operator: "<", value: "25" }],
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 
@@ -212,6 +232,8 @@ describe("parseJoinClause", () => {
       whereClauses: [
         { field: "enrollment.course", operator: "=", value: "'Chemistry'" },
       ],
+      groupByFields: null,
+      hasAggregateWithoutGroupBy: false,
     });
   });
 });
