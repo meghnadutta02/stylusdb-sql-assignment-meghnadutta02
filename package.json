@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "jest",
+
     "test:1": "jest --testPathPattern=./tests/step-01",
     "test:2": "jest --testPathPattern=./tests/step-02",
     "test:3": "jest --testPathPattern=./tests/step-03",
