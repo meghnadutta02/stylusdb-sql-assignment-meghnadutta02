@@ -1,5 +1,5 @@
 const executeSELECTQuery = require("../../src/index");
-const { parseQuery } = require("../../src/queryParser");
+const { parseSelectQuery } = require("../../src/queryParser");
 
 test("Execute SQL Query", async () => {
   const query = "SELECT id, name FROM student";

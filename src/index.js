@@ -1,5 +1,9 @@
-const { parseQuery } = require("./queryParser");
-const readCSV = require("./csvReader");
+const {
+  parseSelectQuery,
+  parseINSERTQuery,
+  parseDELETEQuery,
+} = require("./queryParser");
+const { readCSV, writeCSV } = require("./csvReader");
 
 function performInnerJoin(data, joinData, joinCondition) {
   const leftColumn = joinCondition.left.split(".")[1];
@@ -199,7 +203,7 @@ async function executeSELECTQuery(query) {
     orderByFields,
     limit,
     isDistinct,
-  } = parseQuery(query);
+  } = parseSelectQuery(query);
 
   let data = await readCSV(`${table}.csv`);
   if (joinTable && joinCondition) {
@@ -218,30 +222,7 @@ async function executeSELECTQuery(query) {
         throw new Error(`Unsupported join type: ${joinType}`);
     }
   }
-  function evaluateCondition(row, clause) {
-    const { field, operator, value } = clause;
-    switch (operator) {
-      case "=":
-        if (typeof value === "string") {
-          return row[field] === value.replace(/['"]/g, "");
-        }
-        return row[field] === value;
-      case "!=":
-        return row[field] !== value;
-      case ">":
-        return row[field] > value;
-      case "<":
-        return row[field] < value;
-      case ">=":
-        return row[field] >= value;
-      case "<=":
-        return row[field] <= value;
-      case "LIKE":
-        return new RegExp(value.replace(/%/g, ".*"), "i").test(row[field]);
-      default:
-        throw new Error(`Unsupported operator: ${operator}`);
-    }
-  }
+
   // Apply WHERE clause filtering after JOIN (or on the original data if no join)
   let filteredData =
     whereClauses.length > 0
@@ -286,5 +267,54 @@ async function executeSELECTQuery(query) {
   }
   return data;
 }
+function evaluateCondition(row, clause) {
+  const { field, operator, value } = clause;
+  switch (operator) {
+    case "=":
+      if (typeof value === "string") {
+        return row[field] === value.replace(/['"]/g, "");
+      }
+      return row[field] === value;
+    case "!=":
+      return row[field] !== value;
+    case ">":
+      return row[field] > value;
+    case "<":
+      return row[field] < value;
+    case ">=":
+      return row[field] >= value;
+    case "<=":
+      return row[field] <= value;
+    case "LIKE":
+      return new RegExp(value.replace(/%/g, ".*"), "i").test(row[field]);
+    default:
+      throw new Error(`Unsupported operator: ${operator}`);
+  }
+}
+async function executeINSERTQuery(query) {
+  const { table, columns, values } = parseINSERTQuery(query);
 
-module.exports = executeSELECTQuery;
+  const data = await readCSV(`${table}.csv`);
+  const newRow = {};
+  columns.forEach((column, index) => {
+    newRow[column] = values[index];
+  });
+  const updatedData = [...data, newRow];
+  await writeCSV(`${table}.csv`, updatedData);
+  return updatedData;
+}
+async function executeDELETEQuery(query) {
+  const { table, whereClauses } = parseDELETEQuery(query);
+
+  let data = await readCSV(`${table}.csv`);
+  if (whereClauses.length > 0) {
+    data = data.filter((row) =>
+      whereClauses.every((clause) => !evaluateCondition(row, clause))
+    );
+  } else {
+    data = [];
+  }
+  await writeCSV(`${table}.csv`, data);
+  return { message: "Rows deleted successfully." };
+}
+module.exports = { executeSELECTQuery, executeINSERTQuery, executeDELETEQuery };

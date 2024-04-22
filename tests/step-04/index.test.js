@@ -1,5 +1,5 @@
 const readCSV = require("../../src/csvReader");
-const { parseQuery } = require("../../src/queryParser");
+const { parseSelectQuery } = require("../../src/queryParser");
 const executeSELECTQuery = require("../../src/index");
 
 test("Read CSV File", async () => {
@@ -12,7 +12,7 @@ test("Read CSV File", async () => {
 
 test("Parse SQL Query", () => {
   const query = "SELECT id, name FROM student";
-  const parsed = parseQuery(query);
+  const parsed = parseSelectQuery(query);
   expect(parsed).toEqual({
     fields: ["id", "name"],
     table: "student",

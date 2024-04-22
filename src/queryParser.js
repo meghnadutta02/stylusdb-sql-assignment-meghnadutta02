@@ -1,4 +1,4 @@
-function parseQuery(query) {
+function parseSelectQuery(query) {
   // First, let's trim the query to remove any leading/trailing whitespaces
   try {
     query = query.trim();
@@ -97,6 +97,59 @@ function parseQuery(query) {
   }
 }
 
+function parseINSERTQuery(query) {
+  try {
+    const insertRegex = /^INSERT INTO\s(.+?)\s\((.+?)\)\sVALUES\s\((.+?)\)/i;
+    const insertMatch = query.match(insertRegex);
+    if (!insertMatch) {
+      throw new Error("Invalid INSERT format");
+    }
+
+    const table = insertMatch[1];
+    const columns = insertMatch[2].split(",").map((column) => column.trim());
+    const values = insertMatch[3]
+      .split(",")
+      .map((value) => value.replace(/'/g, "").trim());
+
+    return {
+      type: "INSERT",
+      table,
+      columns,
+      values,
+    };
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function parseDELETEQuery(query) {
+  try {
+    let whereClause = null;
+    const whereIndex = query.toUpperCase().indexOf(" WHERE ");
+    if (whereIndex !== -1) {
+      whereClause = query.substring(whereIndex + 7).trim();
+      query = query.substring(0, whereIndex);
+    }
+    const deleteRegex = /^DELETE\sFROM\s(.+?)(?:\s|$)/i;
+    const deleteMatch = query.match(deleteRegex);
+
+    if (!deleteMatch) {
+      throw new Error("Invalid DELETE format");
+    }
+    const table = deleteMatch[1];
+    let whereClauses = [];
+    if (whereClause) {
+      whereClauses = parseWhereClause(whereClause);
+    }
+    return {
+      type: "DELETE",
+      table,
+      whereClauses,
+    };
+  } catch (error) {
+    console.error(error);
+  }
+}
 function parseJoinClause(query) {
   try {
     const joinRegex =
@@ -145,4 +198,9 @@ function parseWhereClause(whereString) {
   });
 }
 
-module.exports = { parseQuery, parseJoinClause };
+module.exports = {
+  parseSelectQuery,
+  parseJoinClause,
+  parseINSERTQuery,
+  parseDELETEQuery,
+};
