@@ -1,4 +1,4 @@
-const executeSELECTQuery = require("../../src/index");
+const { executeSELECTQuery } = require("../../src/index");
 const { parseSelectQuery } = require("../../src/queryParser");
 
 test("Execute SQL Query", async () => {
