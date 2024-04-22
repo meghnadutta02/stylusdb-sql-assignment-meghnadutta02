@@ -22,6 +22,9 @@ test("Parse SQL Query", () => {
     joinType: null,
     groupByFields: null,
     hasAggregateWithoutGroupBy: false,
+    orderByFields: null,
+    limit: null,
+    isDistinct: false,
   });
 });
 
@@ -53,6 +56,9 @@ test("Parse SQL Query with WHERE Clause", () => {
     joinType: null,
     groupByFields: null,
     hasAggregateWithoutGroupBy: false,
+    orderByFields: null,
+    limit: null,
+    isDistinct: false,
   });
 });
 
@@ -88,10 +94,13 @@ test("Parse SQL Query with Multiple WHERE Clauses", () => {
     joinType: null,
     groupByFields: null,
     hasAggregateWithoutGroupBy: false,
+    orderByFields: null,
+    limit: null,
+    isDistinct: false,
   });
 });
 
-test("Execute SQL Query with Multple WHERE Clause", async () => {
+test("Execute SQL Query with Complex WHERE Clause", async () => {
   const query = "SELECT id, name FROM student WHERE age = 30 AND name = John";
   const result = await executeSELECTQuery(query);
   expect(result.length).toBe(1);

@@ -13,6 +13,9 @@ describe("parseJoinClause", () => {
       joinType: null,
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 
@@ -34,6 +37,9 @@ describe("parseJoinClause", () => {
       joinType: null,
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 
@@ -60,6 +66,9 @@ describe("parseJoinClause", () => {
       joinType: null,
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 
@@ -76,6 +85,9 @@ describe("parseJoinClause", () => {
       joinCondition: { left: "student.id", right: "enrollment.student_id" },
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 
@@ -92,6 +104,9 @@ describe("parseJoinClause", () => {
       joinCondition: { left: "student.id", right: "enrollment.student_id" },
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 
@@ -152,6 +167,9 @@ describe("parseJoinClause", () => {
       joinCondition: { left: "student.id", right: "enrollment.student_id" },
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 
@@ -168,6 +186,9 @@ describe("parseJoinClause", () => {
       joinCondition: { left: "student.id", right: "enrollment.student_id" },
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 
@@ -184,6 +205,9 @@ describe("parseJoinClause", () => {
       whereClauses: [{ field: "student.age", operator: ">", value: "22" }],
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 
@@ -201,6 +225,9 @@ describe("parseJoinClause", () => {
       ],
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 
@@ -217,6 +244,9 @@ describe("parseJoinClause", () => {
       whereClauses: [{ field: "student.age", operator: "<", value: "25" }],
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 
@@ -234,6 +264,9 @@ describe("parseJoinClause", () => {
       ],
       groupByFields: null,
       hasAggregateWithoutGroupBy: false,
+      orderByFields: null,
+      limit: null,
+      isDistinct: false,
     });
   });
 });

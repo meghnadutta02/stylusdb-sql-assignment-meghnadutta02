@@ -196,8 +196,11 @@ async function executeSELECTQuery(query) {
     joinCondition,
     groupByFields,
     hasAggregateWithoutGroupBy,
+    orderByFields,
+    limit,
+    isDistinct,
   } = parseQuery(query);
-  console.log("where clause", whereClauses);
+
   let data = await readCSV(`${table}.csv`);
   if (joinTable && joinCondition) {
     const joinData = await readCSV(`${joinTable}.csv`);
@@ -233,6 +236,8 @@ async function executeSELECTQuery(query) {
         return row[field] >= value;
       case "<=":
         return row[field] <= value;
+      case "LIKE":
+        return new RegExp(value.replace(/%/g, ".*"), "i").test(row[field]);
       default:
         throw new Error(`Unsupported operator: ${operator}`);
     }
@@ -251,13 +256,35 @@ async function executeSELECTQuery(query) {
   if (hasAggregateWithoutGroupBy) {
     filteredData = applyGroupBy(filteredData, [], fields);
   }
-  return filteredData.map((row) => {
+  data = filteredData.map((row) => {
     const selectedRow = {};
     fields.forEach((field) => {
       selectedRow[field] = row[field];
     });
     return selectedRow;
   });
+  if (isDistinct) {
+    data = data.filter(
+      (row, index, self) =>
+        index ===
+        self.findIndex((r) =>
+          Object.keys(r).every((key) => r[key] === row[key])
+        )
+    );
+  }
+  if (orderByFields) {
+    data.sort((a, b) => {
+      for (let { fieldName, order } of orderByFields) {
+        if (a[fieldName] < b[fieldName]) return order === "ASC" ? -1 : 1;
+        if (a[fieldName] > b[fieldName]) return order === "ASC" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  if (limit !== null) {
+    data = data.slice(0, limit);
+  }
+  return data;
 }
 
 module.exports = executeSELECTQuery;

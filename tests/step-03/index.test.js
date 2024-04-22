@@ -22,6 +22,9 @@ test("Parse SQL Query", () => {
     joinType: null,
     groupByFields: null,
     hasAggregateWithoutGroupBy: false,
+    orderByFields: null,
+    limit: null,
+    isDistinct: false,
   });
 });
 
@@ -49,6 +52,9 @@ test("Parse SQL Query with WHERE Clause", () => {
       },
     ],
     joinCondition: null,
+    orderByFields: null,
+    limit: null,
+    isDistinct: false,
     joinTable: null,
     joinType: null,
     groupByFields: null,
